@@ -1,75 +1,92 @@
-import { useState } from "react";
 import { LucideIcon } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 interface WorkflowNodeProps {
   nodeNumber: number;
   title: string;
   icon: LucideIcon;
+  isActive: boolean;
+  progress: number;
   children: React.ReactNode;
-  isExpanded?: boolean;
-  isActive?: boolean;
-  progress?: number;
+  isExpanded: boolean;
+  onToggle: () => void;
+  completed: boolean;
 }
 
 export const WorkflowNode = ({
   nodeNumber,
   title,
   icon: Icon,
+  isActive,
+  progress,
   children,
-  isExpanded = true,
-  isActive = false,
-  progress = 0,
+  isExpanded,
+  onToggle,
+  completed,
 }: WorkflowNodeProps) => {
-  const [expanded, setExpanded] = useState(isExpanded);
-
   return (
-    <Card
-      className={cn(
-        "transition-all duration-300 hover:shadow-md",
-        isActive && "ring-2 ring-primary shadow-primary",
-        !expanded && "cursor-pointer"
-      )}
-      onClick={() => !expanded && setExpanded(true)}
-    >
-      <CardHeader className="cursor-pointer" onClick={() => setExpanded(!expanded)}>
-        <div className="flex items-center gap-4">
-          <div
-            className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-full transition-all",
-              isActive
-                ? "bg-primary text-primary-foreground animate-pulse-glow"
-                : "bg-secondary text-secondary-foreground"
-            )}
-          >
-            <Icon className="h-6 w-6" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">
-                Node {nodeNumber}
-              </span>
-              {progress > 0 && progress < 100 && (
-                <span className="text-xs text-primary font-semibold">
-                  {progress}%
-                </span>
-              )}
-              {progress === 100 && (
-                <span className="text-xs text-success font-semibold">
-                  ✓ Complete
-                </span>
-              )}
-            </div>
-            <CardTitle className="text-xl">{title}</CardTitle>
-          </div>
-        </div>
-        {progress > 0 && (
-          <Progress value={progress} className="mt-3 h-2" />
+    <Collapsible open={isExpanded} onOpenChange={onToggle}>
+      <div
+        className={cn(
+          "rounded-xl border-2 bg-card transition-all duration-300",
+          isActive
+            ? "border-primary shadow-lg shadow-primary/20"
+            : completed
+            ? "border-success/50"
+            : "border-border hover:border-primary/50"
         )}
-      </CardHeader>
-      {expanded && <CardContent className="pt-0">{children}</CardContent>}
-    </Card>
+      >
+        <CollapsibleTrigger className="w-full p-6 text-left">
+          <div className="flex items-center gap-4">
+            <div
+              className={cn(
+                "flex h-12 w-12 items-center justify-center rounded-lg transition-colors",
+                isActive
+                  ? "bg-primary text-primary-foreground"
+                  : completed
+                  ? "bg-success text-success-foreground"
+                  : "bg-secondary"
+              )}
+            >
+              <Icon className="h-6 w-6" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Node {nodeNumber}
+                </span>
+                {isActive && (
+                  <span className="inline-flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+                )}
+                {completed && !isActive && (
+                  <span className="text-xs text-success font-medium">✓ Completed</span>
+                )}
+              </div>
+              <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+            </div>
+            <ChevronDown
+              className={cn(
+                "h-5 w-5 text-muted-foreground transition-transform",
+                isExpanded && "transform rotate-180"
+              )}
+            />
+          </div>
+        </CollapsibleTrigger>
+
+        <CollapsibleContent>
+          <div className="px-6 pb-6">
+            {isActive && progress > 0 && progress < 100 && (
+              <div className="mb-4">
+                <Progress value={progress} className="h-2" />
+              </div>
+            )}
+            {children}
+          </div>
+        </CollapsibleContent>
+      </div>
+    </Collapsible>
   );
 };

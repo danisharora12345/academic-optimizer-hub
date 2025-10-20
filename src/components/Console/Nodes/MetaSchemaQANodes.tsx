@@ -1,64 +1,111 @@
-import { useState } from "react";
-import { FileText, Code, CheckCircle, XCircle } from "lucide-react";
+import { FileText, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WorkflowNode } from "../WorkflowNode";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+import { WorkflowNode } from "../WorkflowNode";
 
-export const MetaAgentNode = ({ nodeNumber, isActive, progress }: any) => {
-  const [scanning, setScanning] = useState(false);
+interface NodeProps {
+  nodeNumber: number;
+  isActive: boolean;
+  progress: number;
+  completed: boolean;
+  isExpanded: boolean;
+  onToggle: () => void;
+  onRun: () => void;
+  enabled: boolean;
+}
 
+export const MetaAgentNode = ({ 
+  nodeNumber, 
+  isActive, 
+  progress, 
+  completed, 
+  isExpanded, 
+  onToggle, 
+  onRun,
+  enabled 
+}: NodeProps) => {
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="Meta Agent"
+      title="Metadata Generation"
       icon={FileText}
       isActive={isActive}
       progress={progress}
+      completed={completed}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     >
       <div className="space-y-4">
-        <div className="space-y-3">
-          <div className="p-4 rounded-lg border bg-card">
-            <p className="text-sm font-medium text-muted-foreground mb-2">Meta Title</p>
-            <p className="text-sm text-foreground">BA (Hons) Accounting and Financial Management – University of West London</p>
+        {!completed && !isActive && (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">
+              {enabled ? "Generate SEO metadata for published content" : "Complete Node 4 first"}
+            </p>
+            <Button onClick={onRun} disabled={!enabled || isActive}>
+              {isActive ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Running...
+                </>
+              ) : (
+                "Run Node 5"
+              )}
+            </Button>
           </div>
-          <div className="p-4 rounded-lg border bg-card">
-            <p className="text-sm font-medium text-muted-foreground mb-2">Meta Description</p>
-            <p className="text-sm text-foreground">Empower your global career with a BA (Hons) Accounting and Finance degree in London. Accredited for ACCA, CIMA, and ICAEW exemptions.</p>
+        )}
+
+        {isActive && (
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Generating metadata...</p>
           </div>
-          <div className="p-4 rounded-lg border bg-card">
-            <p className="text-sm font-medium text-muted-foreground mb-2">Meta Keywords</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {["Accounting degree London", "BSc Accounting and Finance", "Professional accounting qualification", "Global career finance"].map((keyword, i) => (
-                <Badge key={i} variant="secondary">
-                  {keyword}
-                </Badge>
-              ))}
+        )}
+
+        {completed && (
+          <div className="space-y-4">
+            <div className="space-y-3">
+              <div className="p-4 rounded-lg border bg-card">
+                <p className="text-sm font-medium text-muted-foreground mb-2">Meta Title</p>
+                <p className="text-sm text-foreground">BA (Hons) Accounting and Financial Management – University of West London</p>
+              </div>
+              <div className="p-4 rounded-lg border bg-card">
+                <p className="text-sm font-medium text-muted-foreground mb-2">Meta Description</p>
+                <p className="text-sm text-foreground">Empower your global career with a BA (Hons) Accounting and Finance degree in London. Accredited for ACCA, CIMA, and ICAEW exemptions.</p>
+              </div>
+              <div className="p-4 rounded-lg border bg-card">
+                <p className="text-sm font-medium text-muted-foreground mb-2">Meta Keywords</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {["Accounting degree London", "BSc Accounting and Finance", "Professional accounting qualification", "Global career finance"].map((keyword, i) => (
+                    <Badge key={i} variant="secondary">
+                      {keyword}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button className="bg-primary hover:bg-primary-hover">
+                Update Metadata
+              </Button>
+              <Button variant="outline">View All Meta Tags</Button>
             </div>
           </div>
-        </div>
-        <Button
-          onClick={() => {
-            setScanning(true);
-            toast.success("Meta generation started");
-            setTimeout(() => {
-              setScanning(false);
-              toast.success("Meta generation complete");
-            }, 2000);
-          }}
-          disabled={scanning}
-          className="bg-primary hover:bg-primary-hover"
-        >
-          {scanning ? "Generating..." : "Generate Metadata"}
-        </Button>
+        )}
       </div>
     </WorkflowNode>
   );
 };
 
-export const QAAgentNode = ({ nodeNumber, isActive, progress }: any) => {
-  const [checking, setChecking] = useState(false);
-
+export const QAAgentNode = ({ 
+  nodeNumber, 
+  isActive, 
+  progress, 
+  completed, 
+  isExpanded, 
+  onToggle, 
+  onRun,
+  enabled 
+}: NodeProps) => {
   const qaResults = [
     { metric: "Readability", score: 89, status: "success" },
     { metric: "SEO Compliance", score: 94, status: "success" },
@@ -69,53 +116,77 @@ export const QAAgentNode = ({ nodeNumber, isActive, progress }: any) => {
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="QA Agent"
-      icon={CheckCircle}
+      title="QA Checks"
+      icon={CheckCircle2}
       isActive={isActive}
       progress={progress}
+      completed={completed}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     >
       <div className="space-y-4">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left p-2 text-muted-foreground font-medium">Metric</th>
-                <th className="text-center p-2 text-muted-foreground font-medium">Score</th>
-                <th className="text-right p-2 text-muted-foreground font-medium">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {qaResults.map((row, i) => (
-                <tr key={i} className="border-b hover:bg-secondary/50">
-                  <td className="p-2 text-foreground">{row.metric}</td>
-                  <td className="p-2 text-center font-semibold text-primary">{row.score}%</td>
-                  <td className="p-2 text-right">
-                    <Badge variant="default" className="bg-success">
-                      {row.status === "success" ? "✓ Pass" : "✗ Fail"}
-                    </Badge>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
-          <p className="text-xs text-foreground">⚠ Minor issues: 2 pages need image alt text optimization</p>
-        </div>
-        <Button
-          onClick={() => {
-            setChecking(true);
-            toast.success("QA checks started");
-            setTimeout(() => {
-              setChecking(false);
-              toast.success("QA complete");
-            }, 2000);
-          }}
-          disabled={checking}
-          className="bg-primary hover:bg-primary-hover"
-        >
-          {checking ? "Checking..." : "Run QA Checks"}
-        </Button>
+        {!completed && !isActive && (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">
+              {enabled ? "Run quality assurance checks on all content" : "Complete Node 5 first"}
+            </p>
+            <Button onClick={onRun} disabled={!enabled || isActive}>
+              {isActive ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Running...
+                </>
+              ) : (
+                "Run Node 6"
+              )}
+            </Button>
+          </div>
+        )}
+
+        {isActive && (
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Running QA checks...</p>
+          </div>
+        )}
+
+        {completed && (
+          <div className="space-y-4">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2 text-muted-foreground font-medium">Metric</th>
+                    <th className="text-center p-2 text-muted-foreground font-medium">Score</th>
+                    <th className="text-right p-2 text-muted-foreground font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {qaResults.map((row, i) => (
+                    <tr key={i} className="border-b hover:bg-secondary/50">
+                      <td className="p-2 text-foreground">{row.metric}</td>
+                      <td className="p-2 text-center font-semibold text-primary">{row.score}%</td>
+                      <td className="p-2 text-right">
+                        <Badge variant="default" className="bg-success">
+                          {row.status === "success" ? "✓ Pass" : "✗ Fail"}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+              <p className="text-xs text-foreground">⚠ Minor issues: 2 pages need image alt text optimization</p>
+            </div>
+            <div className="flex gap-2">
+              <Button className="bg-primary hover:bg-primary-hover">
+                Re-run QA Checks
+              </Button>
+              <Button variant="outline">Export QA Report</Button>
+            </div>
+          </div>
+        )}
       </div>
     </WorkflowNode>
   );

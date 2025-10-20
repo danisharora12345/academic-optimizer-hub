@@ -1,8 +1,28 @@
-import { BarChart, FileDown, Eye } from "lucide-react";
+import { BarChart, FileDown, Eye, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WorkflowNode } from "../WorkflowNode";
 
-export const FinalReportNode = ({ nodeNumber, isActive, progress }: any) => {
+interface FinalReportNodeProps {
+  nodeNumber: number;
+  isActive: boolean;
+  progress: number;
+  completed: boolean;
+  isExpanded: boolean;
+  onToggle: () => void;
+  onRun: () => void;
+  enabled: boolean;
+}
+
+export const FinalReportNode = ({ 
+  nodeNumber, 
+  isActive, 
+  progress, 
+  completed, 
+  isExpanded, 
+  onToggle, 
+  onRun,
+  enabled 
+}: FinalReportNodeProps) => {
   const performanceData = [
     { label: "Week 1", before: 45, after: 72 },
     { label: "Week 2", before: 48, after: 78 },
@@ -17,8 +37,38 @@ export const FinalReportNode = ({ nodeNumber, isActive, progress }: any) => {
       icon={BarChart}
       isActive={isActive}
       progress={progress}
+      completed={completed}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     >
       <div className="space-y-4">
+        {!completed && !isActive && (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">
+              {enabled ? "Generate final performance report and rankings" : "Complete Node 6 first"}
+            </p>
+            <Button onClick={onRun} disabled={!enabled || isActive}>
+              {isActive ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Running...
+                </>
+              ) : (
+                "Run Node 7"
+              )}
+            </Button>
+          </div>
+        )}
+
+        {isActive && (
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Generating final report...</p>
+          </div>
+        )}
+
+        {completed && (
+          <div className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
           <div className="p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
             <p className="text-sm text-muted-foreground mb-1">SEO Score</p>
@@ -88,19 +138,21 @@ export const FinalReportNode = ({ nodeNumber, isActive, progress }: any) => {
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button className="bg-primary hover:bg-primary-hover">
-            Generate Final Report
-          </Button>
-          <Button variant="outline">
-            <FileDown className="mr-2 h-4 w-4" />
-            Download PDF
-          </Button>
-          <Button variant="outline">
-            <Eye className="mr-2 h-4 w-4" />
-            View Dashboard
-          </Button>
-        </div>
+            <div className="flex gap-2">
+              <Button className="bg-primary hover:bg-primary-hover">
+                Generate Final Report
+              </Button>
+              <Button variant="outline">
+                <FileDown className="mr-2 h-4 w-4" />
+                Download PDF
+              </Button>
+              <Button variant="outline">
+                <Eye className="mr-2 h-4 w-4" />
+                View Dashboard
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </WorkflowNode>
   );

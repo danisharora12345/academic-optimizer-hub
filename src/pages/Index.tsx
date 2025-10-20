@@ -20,6 +20,8 @@ const Index = () => {
   const [currentNode, setCurrentNode] = useState(0);
   const [isRunningAll, setIsRunningAll] = useState(false);
   const [nodeProgress, setNodeProgress] = useState<number[]>(Array(7).fill(0));
+  const [completedNodes, setCompletedNodes] = useState<boolean[]>(Array(7).fill(false));
+  const [expandedNodes, setExpandedNodes] = useState<boolean[]>(Array(7).fill(false));
 
   const totalNodes = 7;
 
@@ -29,9 +31,62 @@ const Index = () => {
 
   const handleConfirmAudit = () => {
     setShowAuditModal(false);
-    toast.success("SEO Audit initiated");
-    setCurrentNode(1);
-    setNodeProgress([100, 0, 0, 0, 0, 0, 0]);
+    toast.success("SEO Audit initiated - Ready to start Node 1");
+    setCurrentNode(0);
+    setNodeProgress(Array(7).fill(0));
+    setCompletedNodes(Array(7).fill(false));
+    setExpandedNodes([true, false, false, false, false, false, false]);
+  };
+
+  const handleRunNode = (nodeIndex: number) => {
+    if (nodeIndex > 0 && !completedNodes[nodeIndex - 1]) {
+      toast.error(`Please complete Node ${nodeIndex} first`);
+      return;
+    }
+
+    setCurrentNode(nodeIndex + 1);
+    setNodeProgress(prev => {
+      const updated = [...prev];
+      updated[nodeIndex] = 0;
+      return updated;
+    });
+
+    // Simulate node execution
+    const interval = setInterval(() => {
+      setNodeProgress(prev => {
+        const updated = [...prev];
+        if (updated[nodeIndex] < 100) {
+          updated[nodeIndex] += 10;
+        } else {
+          clearInterval(interval);
+          setCompletedNodes(prev => {
+            const updated = [...prev];
+            updated[nodeIndex] = true;
+            return updated;
+          });
+          setCurrentNode(0);
+          toast.success(`Node ${nodeIndex + 1} completed`);
+          
+          // Auto-expand next node if available
+          if (nodeIndex < totalNodes - 1) {
+            setExpandedNodes(prev => {
+              const updated = [...prev];
+              updated[nodeIndex + 1] = true;
+              return updated;
+            });
+          }
+        }
+        return updated;
+      });
+    }, 200);
+  };
+
+  const handleToggleNode = (nodeIndex: number) => {
+    setExpandedNodes(prev => {
+      const updated = [...prev];
+      updated[nodeIndex] = !updated[nodeIndex];
+      return updated;
+    });
   };
 
   const handleRunAll = () => {
@@ -39,47 +94,53 @@ const Index = () => {
     
     setIsRunningAll(true);
     setCurrentNode(0);
+    setNodeProgress(Array(7).fill(0));
+    setCompletedNodes(Array(7).fill(false));
+    setExpandedNodes([true, false, false, false, false, false, false]);
     toast.success("Running all nodes sequentially");
 
     let node = 0;
-    const interval = setInterval(() => {
+    const runNextNode = () => {
       if (node >= totalNodes) {
-        clearInterval(interval);
         setIsRunningAll(false);
         toast.success("All nodes completed successfully");
         return;
       }
 
       setCurrentNode(node + 1);
-      setNodeProgress(prev => {
+      setExpandedNodes(prev => {
         const updated = [...prev];
-        updated[node] = 100;
+        updated[node] = true;
         return updated;
       });
 
-      // Scroll to active node
       const element = document.getElementById(`node-${node + 1}`);
       element?.scrollIntoView({ behavior: "smooth", block: "center" });
 
-      node++;
-    }, 2500);
-  };
-
-  useEffect(() => {
-    if (currentNode > 0 && currentNode <= totalNodes && !isRunningAll) {
-      const progress = setInterval(() => {
+      const interval = setInterval(() => {
         setNodeProgress(prev => {
           const updated = [...prev];
-          if (updated[currentNode - 1] < 100) {
-            updated[currentNode - 1] += 5;
+          if (updated[node] < 100) {
+            updated[node] += 10;
+          } else {
+            clearInterval(interval);
+            setCompletedNodes(prev => {
+              const updated = [...prev];
+              updated[node] = true;
+              return updated;
+            });
+            setCurrentNode(0);
+            node++;
+            setTimeout(runNextNode, 500);
           }
           return updated;
         });
-      }, 100);
+      }, 200);
+    };
 
-      return () => clearInterval(progress);
-    }
-  }, [currentNode, isRunningAll]);
+    runNextNode();
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
@@ -95,6 +156,11 @@ const Index = () => {
                 nodeNumber={1} 
                 isActive={currentNode === 1}
                 progress={nodeProgress[0]}
+                completed={completedNodes[0]}
+                isExpanded={expandedNodes[0]}
+                onToggle={() => handleToggleNode(0)}
+                onRun={() => handleRunNode(0)}
+                enabled={true}
               />
             </div>
             
@@ -103,6 +169,11 @@ const Index = () => {
                 nodeNumber={2} 
                 isActive={currentNode === 2}
                 progress={nodeProgress[1]}
+                completed={completedNodes[1]}
+                isExpanded={expandedNodes[1]}
+                onToggle={() => handleToggleNode(1)}
+                onRun={() => handleRunNode(1)}
+                enabled={completedNodes[0]}
               />
             </div>
             
@@ -111,6 +182,11 @@ const Index = () => {
                 nodeNumber={3} 
                 isActive={currentNode === 3}
                 progress={nodeProgress[2]}
+                completed={completedNodes[2]}
+                isExpanded={expandedNodes[2]}
+                onToggle={() => handleToggleNode(2)}
+                onRun={() => handleRunNode(2)}
+                enabled={completedNodes[1]}
               />
             </div>
             
@@ -119,6 +195,11 @@ const Index = () => {
                 nodeNumber={4} 
                 isActive={currentNode === 4}
                 progress={nodeProgress[3]}
+                completed={completedNodes[3]}
+                isExpanded={expandedNodes[3]}
+                onToggle={() => handleToggleNode(3)}
+                onRun={() => handleRunNode(3)}
+                enabled={completedNodes[2]}
               />
             </div>
             
@@ -127,6 +208,11 @@ const Index = () => {
                 nodeNumber={5} 
                 isActive={currentNode === 5}
                 progress={nodeProgress[4]}
+                completed={completedNodes[4]}
+                isExpanded={expandedNodes[4]}
+                onToggle={() => handleToggleNode(4)}
+                onRun={() => handleRunNode(4)}
+                enabled={completedNodes[3]}
               />
             </div>
             
@@ -135,6 +221,11 @@ const Index = () => {
                 nodeNumber={6} 
                 isActive={currentNode === 6}
                 progress={nodeProgress[5]}
+                completed={completedNodes[5]}
+                isExpanded={expandedNodes[5]}
+                onToggle={() => handleToggleNode(5)}
+                onRun={() => handleRunNode(5)}
+                enabled={completedNodes[4]}
               />
             </div>
             
@@ -143,6 +234,11 @@ const Index = () => {
                 nodeNumber={7} 
                 isActive={currentNode === 7}
                 progress={nodeProgress[6]}
+                completed={completedNodes[6]}
+                isExpanded={expandedNodes[6]}
+                onToggle={() => handleToggleNode(6)}
+                onRun={() => handleRunNode(6)}
+                enabled={completedNodes[5]}
               />
             </div>
           </div>

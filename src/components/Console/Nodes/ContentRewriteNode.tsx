@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PenTool, Eye, Send } from "lucide-react";
+import { PenTool, Eye, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WorkflowNode } from "../WorkflowNode";
 import {
@@ -9,11 +9,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
 
-export const ContentRewriteNode = ({ nodeNumber, isActive, progress }: any) => {
+interface ContentRewriteNodeProps {
+  nodeNumber: number;
+  isActive: boolean;
+  progress: number;
+  completed: boolean;
+  isExpanded: boolean;
+  onToggle: () => void;
+  onRun: () => void;
+  enabled: boolean;
+}
+
+export const ContentRewriteNode = ({ 
+  nodeNumber, 
+  isActive, 
+  progress, 
+  completed, 
+  isExpanded, 
+  onToggle, 
+  onRun,
+  enabled 
+}: ContentRewriteNodeProps) => {
   const [tone, setTone] = useState("academic");
-  const [generating, setGenerating] = useState(false);
 
   const title = "BA (Hons) Accounting and Financial Management";
   const body = `Empower your global career with a BA (Hons) Accounting and Finance degree in London.
@@ -26,15 +44,6 @@ Why Choose This Course:
 • Learn from professionals: Taught by experienced accountants and finance professionals, many with Big Four experience, you will gain insight into the financial practices shaping today's global economy.
 • Global perspective: Explore accounting and finance within the wider context of sustainability, corporate governance, and FinTech.`;
 
-  const handleGenerate = () => {
-    setGenerating(true);
-    toast.success("Generating enhanced content");
-    setTimeout(() => {
-      setGenerating(false);
-      toast.success("Content rewrite complete");
-    }, 2000);
-  };
-
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
@@ -42,8 +51,38 @@ Why Choose This Course:
       icon={PenTool}
       isActive={isActive}
       progress={progress}
+      completed={completed}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     >
       <div className="space-y-4">
+        {!completed && !isActive && (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">
+              {enabled ? "Generate optimized content based on keyword analysis" : "Complete Node 2 first"}
+            </p>
+            <Button onClick={onRun} disabled={!enabled || isActive}>
+              {isActive ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Running...
+                </>
+              ) : (
+                "Run Node 3"
+              )}
+            </Button>
+          </div>
+        )}
+
+        {isActive && (
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Rewriting content with SEO optimization...</p>
+          </div>
+        )}
+
+        {completed && (
+          <div className="space-y-4">
         <div className="space-y-3">
           <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
             <h3 className="text-lg font-bold text-foreground mb-2">{title}</h3>
@@ -80,23 +119,18 @@ Why Choose This Course:
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button
-            onClick={handleGenerate}
-            disabled={generating}
-            className="bg-primary hover:bg-primary-hover"
-          >
-            {generating ? "Generating..." : "Generate Rewrite"}
-          </Button>
-          <Button variant="outline">
-            <Eye className="mr-2 h-4 w-4" />
-            Preview Draft
-          </Button>
-          <Button variant="outline">
-            <Send className="mr-2 h-4 w-4" />
-            Submit for Review
-          </Button>
-        </div>
+            <div className="flex gap-2">
+              <Button variant="outline">
+                <Eye className="mr-2 h-4 w-4" />
+                Preview Draft
+              </Button>
+              <Button variant="outline">
+                <Send className="mr-2 h-4 w-4" />
+                Submit for Review
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </WorkflowNode>
   );

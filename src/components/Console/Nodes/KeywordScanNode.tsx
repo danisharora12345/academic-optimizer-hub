@@ -1,12 +1,29 @@
-import { useState } from "react";
-import { Search, FileDown, Eye } from "lucide-react";
+import { Search, FileDown, Eye, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WorkflowNode } from "../WorkflowNode";
-import { toast } from "sonner";
 
-export const KeywordScanNode = ({ nodeNumber, isActive, progress }: any) => {
-  const [scanning, setScanning] = useState(false);
+interface KeywordScanNodeProps {
+  nodeNumber: number;
+  isActive: boolean;
+  progress: number;
+  completed: boolean;
+  isExpanded: boolean;
+  onToggle: () => void;
+  onRun: () => void;
+  enabled: boolean;
+}
+
+export const KeywordScanNode = ({ 
+  nodeNumber, 
+  isActive, 
+  progress, 
+  completed, 
+  isExpanded, 
+  onToggle, 
+  onRun,
+  enabled 
+}: KeywordScanNodeProps) => {
 
   const mustHaveKeywords = [
     "Accounting and finance degree London",
@@ -37,24 +54,43 @@ export const KeywordScanNode = ({ nodeNumber, isActive, progress }: any) => {
     "Master's in Accounting London"
   ];
 
-  const handleScan = () => {
-    setScanning(true);
-    toast.success("Keyword scan started");
-    setTimeout(() => {
-      setScanning(false);
-      toast.success("Keyword scan completed");
-    }, 2000);
-  };
-
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="Keyword & Performance Scan Results"
+      title="Keyword & Performance Scan"
       icon={Search}
       isActive={isActive}
       progress={progress}
+      completed={completed}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     >
       <div className="space-y-4">
+        {!completed && !isActive && (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">Click the button below to start the keyword scan</p>
+            <Button onClick={onRun} disabled={!enabled || isActive}>
+              {isActive ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Running...
+                </>
+              ) : (
+                "Run Node 1"
+              )}
+            </Button>
+          </div>
+        )}
+
+        {isActive && (
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Scanning keywords and analyzing performance...</p>
+          </div>
+        )}
+
+        {completed && (
+          <div className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
           <div className="p-4 rounded-lg bg-secondary/50">
             <p className="text-sm text-muted-foreground mb-1">Courses Scanned</p>
@@ -94,23 +130,18 @@ export const KeywordScanNode = ({ nodeNumber, isActive, progress }: any) => {
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button
-            onClick={handleScan}
-            disabled={scanning}
-            className="bg-primary hover:bg-primary-hover"
-          >
-            {scanning ? "Scanning..." : "Run Keyword Scan"}
-          </Button>
-          <Button variant="outline">
-            <Eye className="mr-2 h-4 w-4" />
-            View Keyword Report
-          </Button>
-          <Button variant="outline">
-            <FileDown className="mr-2 h-4 w-4" />
-            Export CSV
-          </Button>
-        </div>
+            <div className="flex gap-2">
+              <Button variant="outline">
+                <Eye className="mr-2 h-4 w-4" />
+                View Keyword Report
+              </Button>
+              <Button variant="outline">
+                <FileDown className="mr-2 h-4 w-4" />
+                Export CSV
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </WorkflowNode>
   );
