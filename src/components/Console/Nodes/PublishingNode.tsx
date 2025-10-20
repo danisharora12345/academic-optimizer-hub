@@ -20,7 +20,7 @@ export const PublishingNode = ({ nodeNumber, isActive, progress }: any) => {
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="Publishing / Sync Agent"
+      title="Publishing / Sync Status"
       icon={Upload}
       isActive={isActive}
       progress={progress}

@@ -13,7 +13,7 @@ export const FinalReportNode = ({ nodeNumber, isActive, progress }: any) => {
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="Final Report - Analytics & Insights"
+      title="Final Ranking & Scores"
       icon={BarChart}
       isActive={isActive}
       progress={progress}
@@ -21,16 +21,45 @@ export const FinalReportNode = ({ nodeNumber, isActive, progress }: any) => {
       <div className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
           <div className="p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+            <p className="text-sm text-muted-foreground mb-1">SEO Score</p>
+            <div className="flex items-baseline gap-1">
+              <p className="text-3xl font-bold text-primary">92</p>
+              <p className="text-lg text-muted-foreground">%</p>
+            </div>
+            <div className="h-2 w-full bg-secondary rounded-full overflow-hidden mt-2">
+              <div className="h-full bg-primary" style={{ width: "92%" }} />
+            </div>
+          </div>
+          <div className="p-4 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
+            <p className="text-sm text-muted-foreground mb-1">Readability</p>
+            <div className="flex items-baseline gap-1">
+              <p className="text-3xl font-bold text-success">89</p>
+              <p className="text-lg text-muted-foreground">%</p>
+            </div>
+            <div className="h-2 w-full bg-secondary rounded-full overflow-hidden mt-2">
+              <div className="h-full bg-success" style={{ width: "89%" }} />
+            </div>
+          </div>
+          <div className="p-4 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border border-accent/30">
+            <p className="text-sm text-muted-foreground mb-1">Engagement Lift</p>
+            <div className="flex items-baseline gap-1">
+              <p className="text-3xl font-bold text-accent-foreground">+67</p>
+              <p className="text-lg text-muted-foreground">%</p>
+            </div>
+            <div className="h-2 w-full bg-secondary rounded-full overflow-hidden mt-2">
+              <div className="h-full bg-accent" style={{ width: "67%" }} />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="p-4 rounded-lg border bg-card">
             <p className="text-sm text-muted-foreground mb-1">Avg Rank Improvement</p>
             <p className="text-3xl font-bold text-primary">+43%</p>
           </div>
-          <div className="p-4 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
-            <p className="text-sm text-muted-foreground mb-1">Engagement Lift</p>
-            <p className="text-3xl font-bold text-success">+67%</p>
-          </div>
-          <div className="p-4 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border border-accent/30">
+          <div className="p-4 rounded-lg border bg-card">
             <p className="text-sm text-muted-foreground mb-1">Pages Optimized</p>
-            <p className="text-3xl font-bold text-accent-foreground">200</p>
+            <p className="text-3xl font-bold text-foreground">200</p>
           </div>
         </div>
 

@@ -7,7 +7,7 @@ import { KeywordScanNode } from "@/components/Console/Nodes/KeywordScanNode";
 import { BenchmarkNode } from "@/components/Console/Nodes/BenchmarkNode";
 import { ContentRewriteNode } from "@/components/Console/Nodes/ContentRewriteNode";
 import { PublishingNode } from "@/components/Console/Nodes/PublishingNode";
-import { MetaAgentNode, SchemaAgentNode, QAAgentNode } from "@/components/Console/Nodes/MetaSchemaQANodes";
+import { MetaAgentNode, QAAgentNode } from "@/components/Console/Nodes/MetaSchemaQANodes";
 import { FinalReportNode } from "@/components/Console/Nodes/FinalReportNode";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -19,9 +19,9 @@ const Index = () => {
   const [showAuditModal, setShowAuditModal] = useState(false);
   const [currentNode, setCurrentNode] = useState(0);
   const [isRunningAll, setIsRunningAll] = useState(false);
-  const [nodeProgress, setNodeProgress] = useState<number[]>(Array(8).fill(0));
+  const [nodeProgress, setNodeProgress] = useState<number[]>(Array(7).fill(0));
 
-  const totalNodes = 8;
+  const totalNodes = 7;
 
   const handleStartAudit = () => {
     setShowAuditModal(true);
@@ -31,7 +31,7 @@ const Index = () => {
     setShowAuditModal(false);
     toast.success("SEO Audit initiated");
     setCurrentNode(1);
-    setNodeProgress([100, 0, 0, 0, 0, 0, 0, 0]);
+    setNodeProgress([100, 0, 0, 0, 0, 0, 0]);
   };
 
   const handleRunAll = () => {
@@ -131,7 +131,7 @@ const Index = () => {
             </div>
             
             <div id="node-6">
-              <SchemaAgentNode 
+              <QAAgentNode 
                 nodeNumber={6} 
                 isActive={currentNode === 6}
                 progress={nodeProgress[5]}
@@ -139,18 +139,10 @@ const Index = () => {
             </div>
             
             <div id="node-7">
-              <QAAgentNode 
+              <FinalReportNode 
                 nodeNumber={7} 
                 isActive={currentNode === 7}
                 progress={nodeProgress[6]}
-              />
-            </div>
-            
-            <div id="node-8">
-              <FinalReportNode 
-                nodeNumber={8} 
-                isActive={currentNode === 8}
-                progress={nodeProgress[7]}
               />
             </div>
           </div>
