@@ -60,7 +60,7 @@ const Index = () => {
         case 1: return 0.615; // 13 seconds (Node 2)
         case 2: return 0.4;   // 20 seconds (Node 3)
         case 3: return 1.25;  // 8 seconds (Node 4)
-        case 4: return 1.25;  // 8 seconds (Node 5)
+        case 4: return 0.8;   // 10 seconds (Node 5)
         case 5: return 0.8;   // 10 seconds (Node 6)
         case 6: return 1.111; // 9 seconds (Node 7)
         default: return 1.25; // 8 seconds
@@ -143,7 +143,7 @@ const Index = () => {
           case 1: return 0.615; // 13 seconds (Node 2)
           case 2: return 0.4;   // 20 seconds (Node 3)
           case 3: return 1.25;  // 8 seconds (Node 4)
-          case 4: return 1.25;  // 8 seconds (Node 5)
+          case 4: return 0.8;   // 10 seconds (Node 5)
           case 5: return 0.8;   // 10 seconds (Node 6)
           case 6: return 1.111; // 9 seconds (Node 7)
           default: return 1.25; // 8 seconds
