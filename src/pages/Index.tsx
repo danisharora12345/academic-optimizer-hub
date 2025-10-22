@@ -53,12 +53,23 @@ const Index = () => {
       return updated;
     });
 
-    // Simulate node execution (8 seconds per node)
+    // Different durations for different nodes
+    const getIncrement = (index: number) => {
+      switch(index) {
+        case 0: return 0.444; // 18 seconds
+        case 1: return 0.615; // 13 seconds
+        case 2: return 0.4;   // 20 seconds
+        default: return 1.25; // 8 seconds
+      }
+    };
+
+    const increment = getIncrement(nodeIndex);
+
     const interval = setInterval(() => {
       setNodeProgress(prev => {
         const updated = [...prev];
         if (updated[nodeIndex] < 100) {
-          updated[nodeIndex] += 1.25; // 80ms * 80 steps = 6400ms ≈ 8 seconds
+          updated[nodeIndex] += increment;
         } else {
           clearInterval(interval);
           setCompletedNodes(prev => {
@@ -121,11 +132,23 @@ const Index = () => {
       const element = document.getElementById(`node-${node + 1}`);
       element?.scrollIntoView({ behavior: "smooth", block: "center" });
 
+      // Different durations for different nodes
+      const getIncrement = (index: number) => {
+        switch(index) {
+          case 0: return 0.444; // 18 seconds
+          case 1: return 0.615; // 13 seconds
+          case 2: return 0.4;   // 20 seconds
+          default: return 1.25; // 8 seconds
+        }
+      };
+
+      const increment = getIncrement(node);
+
       const interval = setInterval(() => {
         setNodeProgress(prev => {
           const updated = [...prev];
           if (updated[node] < 100) {
-            updated[node] += 1.25; // 80ms * 80 steps = 6400ms ≈ 8 seconds
+            updated[node] += increment;
           } else {
             clearInterval(interval);
             setCompletedNodes(prev => {
