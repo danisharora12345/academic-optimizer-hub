@@ -79,11 +79,14 @@ export const WorkflowNode = ({
         <CollapsibleContent>
           <div className="px-6 pb-6">
             {isActive && progress > 0 && progress < 100 && (
-              <div className="mb-4">
+              <div className="mb-4 space-y-2">
                 <Progress value={progress} className="h-2" />
+                <p className="text-sm text-muted-foreground">Processing... {Math.round(progress)}%</p>
               </div>
             )}
-            {children}
+            <div className={completed ? "animate-fade-in" : ""}>
+              {children}
+            </div>
           </div>
         </CollapsibleContent>
       </div>

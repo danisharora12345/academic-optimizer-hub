@@ -22,6 +22,7 @@ const Index = () => {
   const [nodeProgress, setNodeProgress] = useState<number[]>(Array(7).fill(0));
   const [completedNodes, setCompletedNodes] = useState<boolean[]>(Array(7).fill(false));
   const [expandedNodes, setExpandedNodes] = useState<boolean[]>(Array(7).fill(false));
+  const [workflowComplete, setWorkflowComplete] = useState(false);
 
   const totalNodes = 7;
 
@@ -36,6 +37,7 @@ const Index = () => {
     setNodeProgress(Array(7).fill(0));
     setCompletedNodes(Array(7).fill(false));
     setExpandedNodes([true, false, false, false, false, false, false]);
+    setWorkflowComplete(false);
   };
 
   const handleRunNode = (nodeIndex: number) => {
@@ -51,12 +53,12 @@ const Index = () => {
       return updated;
     });
 
-    // Simulate node execution
+    // Simulate node execution (8 seconds per node)
     const interval = setInterval(() => {
       setNodeProgress(prev => {
         const updated = [...prev];
         if (updated[nodeIndex] < 100) {
-          updated[nodeIndex] += 10;
+          updated[nodeIndex] += 1.25; // 80ms * 80 steps = 6400ms ≈ 8 seconds
         } else {
           clearInterval(interval);
           setCompletedNodes(prev => {
@@ -78,7 +80,7 @@ const Index = () => {
         }
         return updated;
       });
-    }, 200);
+    }, 80);
   };
 
   const handleToggleNode = (nodeIndex: number) => {
@@ -97,12 +99,14 @@ const Index = () => {
     setNodeProgress(Array(7).fill(0));
     setCompletedNodes(Array(7).fill(false));
     setExpandedNodes([true, false, false, false, false, false, false]);
+    setWorkflowComplete(false);
     toast.success("Running all nodes sequentially");
 
     let node = 0;
     const runNextNode = () => {
       if (node >= totalNodes) {
         setIsRunningAll(false);
+        setWorkflowComplete(true);
         toast.success("All nodes completed successfully");
         return;
       }
@@ -121,7 +125,7 @@ const Index = () => {
         setNodeProgress(prev => {
           const updated = [...prev];
           if (updated[node] < 100) {
-            updated[node] += 10;
+            updated[node] += 1.25; // 80ms * 80 steps = 6400ms ≈ 8 seconds
           } else {
             clearInterval(interval);
             setCompletedNodes(prev => {
@@ -135,7 +139,7 @@ const Index = () => {
           }
           return updated;
         });
-      }, 200);
+      }, 80);
     };
 
     runNextNode();
@@ -241,6 +245,22 @@ const Index = () => {
                 enabled={completedNodes[5]}
               />
             </div>
+
+            {workflowComplete && (
+              <div className="mt-8 p-6 rounded-xl bg-success/10 border-2 border-success animate-fade-in">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success">
+                    <svg className="h-6 w-6 text-success-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-success">Workflow Complete</h3>
+                    <p className="text-sm text-muted-foreground">All optimization nodes have been successfully executed</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </div>
