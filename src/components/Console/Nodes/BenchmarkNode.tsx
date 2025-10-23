@@ -41,25 +41,7 @@ export const BenchmarkNode = ({
       onToggle={onToggle}
     >
       <div className="space-y-4">
-        {!completed && !isActive && (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground mb-4">
-              {enabled ? "Analyze competitors in the market" : "Complete Node 1 first"}
-            </p>
-            <Button onClick={onRun} disabled={!enabled || isActive}>
-              {isActive ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Running...
-                </>
-              ) : (
-                "Run Node 2"
-              )}
-            </Button>
-          </div>
-        )}
-
-        {isActive && (
+        {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
             <p className="text-muted-foreground">Analyzing competitors...</p>

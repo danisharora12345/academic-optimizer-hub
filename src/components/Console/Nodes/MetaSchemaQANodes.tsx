@@ -36,25 +36,7 @@ export const MetaAgentNode = ({
       onToggle={onToggle}
     >
       <div className="space-y-4">
-        {!completed && !isActive && (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground mb-4">
-              {enabled ? "Generate SEO metadata for published content" : "Complete Node 4 first"}
-            </p>
-            <Button onClick={onRun} disabled={!enabled || isActive}>
-              {isActive ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Running...
-                </>
-              ) : (
-                "Run Node 5"
-              )}
-            </Button>
-          </div>
-        )}
-
-        {isActive && (
+        {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
             <p className="text-muted-foreground">Generating metadata...</p>
@@ -125,25 +107,7 @@ export const QAAgentNode = ({
       onToggle={onToggle}
     >
       <div className="space-y-4">
-        {!completed && !isActive && (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground mb-4">
-              {enabled ? "Run quality assurance checks on all content" : "Complete Node 5 first"}
-            </p>
-            <Button onClick={onRun} disabled={!enabled || isActive}>
-              {isActive ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Running...
-                </>
-              ) : (
-                "Run Node 6"
-              )}
-            </Button>
-          </div>
-        )}
-
-        {isActive && (
+        {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
             <p className="text-muted-foreground">Running QA checks...</p>

@@ -32,12 +32,17 @@ const Index = () => {
 
   const handleConfirmAudit = () => {
     setShowAuditModal(false);
-    toast.success("SEO Audit initiated - Ready to start Node 1");
+    toast.success("SEO Audit initiated - Starting automatic workflow");
     setCurrentNode(0);
     setNodeProgress(Array(7).fill(0));
     setCompletedNodes(Array(7).fill(false));
     setExpandedNodes([true, false, false, false, false, false, false]);
     setWorkflowComplete(false);
+    
+    // Automatically start running all nodes
+    setTimeout(() => {
+      handleRunAll();
+    }, 500);
   };
 
   const handleRunNode = (nodeIndex: number) => {
