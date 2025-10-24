@@ -27,7 +27,7 @@ export const MetaAgentNode = ({
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="Metadata Generation"
+      title="Metadata & Schema Agent"
       icon={FileText}
       isActive={isActive}
       progress={progress}
@@ -39,37 +39,61 @@ export const MetaAgentNode = ({
         {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-            <p className="text-muted-foreground">Generating metadata...</p>
+            <p className="text-muted-foreground">Auto-generating metadata and structured JSON-LD...</p>
           </div>
         )}
 
         {completed && (
-          <div className="space-y-4">
-            <div className="space-y-3">
-              <div className="p-4 rounded-lg border bg-card">
-                <p className="text-sm font-medium text-muted-foreground mb-2">Meta Title</p>
-                <p className="text-sm text-foreground">BA (Hons) Accounting and Financial Management – University of West London</p>
+          <div className="space-y-4 animate-fade-in">
+            <div className="bg-card p-4 rounded-lg border border-primary/20 space-y-3">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-foreground">Generated Metadata</h4>
+                <span className="text-xs text-green-500 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Schema Validation Passed ✓
+                </span>
               </div>
-              <div className="p-4 rounded-lg border bg-card">
-                <p className="text-sm font-medium text-muted-foreground mb-2">Meta Description</p>
-                <p className="text-sm text-foreground">Empower your global career with a BA (Hons) Accounting and Finance degree in London. Accredited for ACCA, CIMA, and ICAEW exemptions.</p>
+              <div>
+                <p className="text-xs text-muted-foreground">Meta Title (58 chars)</p>
+                <p className="text-sm font-medium text-foreground">
+                  BSc Accounting and Finance London | ACCA Accredited | UWL
+                </p>
               </div>
-              <div className="p-4 rounded-lg border bg-card">
-                <p className="text-sm font-medium text-muted-foreground mb-2">Meta Keywords</p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {["Accounting degree London", "BSc Accounting and Finance", "Professional accounting qualification", "Global career finance"].map((keyword, i) => (
-                    <Badge key={i} variant="secondary">
-                      {keyword}
-                    </Badge>
-                  ))}
+              <div>
+                <p className="text-xs text-muted-foreground">Meta Description (156 chars)</p>
+                <p className="text-sm text-foreground">
+                  Study Accounting and Finance at UWL London. ACCA/CIMA accredited degree with FinTech, ESG finance & data analytics. Start your global finance career.
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Schema JSON-LD (Course, Organization, FAQ)</p>
+                <div className="bg-muted p-3 rounded text-xs font-mono overflow-x-auto">
+                  <pre className="text-foreground">
+{`{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "BSc Accounting and Finance",
+  "provider": {
+    "@type": "Organization",
+    "name": "University of West London"
+  },
+  "offers": {
+    "@type": "Offer",
+    "category": "Undergraduate"
+  }
+}`}
+                  </pre>
                 </div>
               </div>
             </div>
+            
             <div className="flex gap-2">
-              <Button className="bg-primary hover:bg-primary-hover">
-                Update Metadata
+              <Button size="sm" variant="outline">
+                Edit Schema
               </Button>
-              <Button variant="outline">View All Meta Tags</Button>
+              <Button size="sm" variant="outline">
+                Validate JSON-LD
+              </Button>
             </div>
           </div>
         )}
@@ -88,17 +112,10 @@ export const QAAgentNode = ({
   onRun,
   enabled 
 }: NodeProps) => {
-  const qaResults = [
-    { metric: "Readability", score: 89, status: "success" },
-    { metric: "SEO Compliance", score: 94, status: "success" },
-    { metric: "Content Quality", score: 91, status: "success" },
-    { metric: "Mobile Friendly", score: 88, status: "success" },
-  ];
-
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="QA Checks"
+      title="Publishing & QA Agent"
       icon={CheckCircle2}
       isActive={isActive}
       progress={progress}
@@ -110,44 +127,83 @@ export const QAAgentNode = ({
         {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-            <p className="text-muted-foreground">Running QA checks...</p>
+            <p className="text-muted-foreground">Running QA checks: Lighthouse, broken links, schema validation, duplicate meta...</p>
           </div>
         )}
 
         {completed && (
-          <div className="space-y-4">
+          <div className="space-y-4 animate-fade-in">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              {[
+                { label: "Performance", score: 96 },
+                { label: "Accessibility", score: 98 },
+                { label: "SEO", score: 95 },
+                { label: "Schema", score: 94 },
+              ].map((item, i) => (
+                <div key={i} className="bg-card p-3 rounded-lg border border-border text-center">
+                  <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
+                  <p className="text-2xl font-bold text-primary">{item.score}</p>
+                  <div className="w-full bg-muted h-1.5 rounded-full mt-2">
+                    <div 
+                      className="bg-primary h-1.5 rounded-full transition-all duration-1000"
+                      style={{ width: `${item.score}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-2 text-muted-foreground font-medium">Metric</th>
-                    <th className="text-center p-2 text-muted-foreground font-medium">Score</th>
-                    <th className="text-right p-2 text-muted-foreground font-medium">Status</th>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 text-muted-foreground font-medium">QA Check</th>
+                    <th className="text-left py-2 text-muted-foreground font-medium">Result</th>
+                    <th className="text-left py-2 text-muted-foreground font-medium">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {qaResults.map((row, i) => (
-                    <tr key={i} className="border-b hover:bg-secondary/50">
-                      <td className="p-2 text-foreground">{row.metric}</td>
-                      <td className="p-2 text-center font-semibold text-primary">{row.score}%</td>
-                      <td className="p-2 text-right">
-                        <Badge variant="default" className="bg-success">
-                          {row.status === "success" ? "✓ Pass" : "✗ Fail"}
-                        </Badge>
+                  {[
+                    { metric: "Lighthouse Score", score: "95/100", status: "Pass" },
+                    { metric: "Broken Links", score: "0 found", status: "Pass" },
+                    { metric: "Schema Validation", score: "Valid JSON-LD", status: "Pass" },
+                    { metric: "Duplicate Meta", score: "None detected", status: "Pass" },
+                    { metric: "Mobile Responsive", score: "100%", status: "Pass" },
+                  ].map((item, i) => (
+                    <tr key={i} className="border-b border-border/50">
+                      <td className="py-2 text-foreground">{item.metric}</td>
+                      <td className="py-2 text-foreground">{item.score}</td>
+                      <td className="py-2">
+                        <span className="text-xs px-2 py-1 bg-green-500/10 text-green-500 rounded flex items-center gap-1 w-fit">
+                          <CheckCircle2 className="w-3 h-3" />
+                          {item.status}
+                        </span>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
-              <p className="text-xs text-foreground">⚠ Minor issues: 2 pages need image alt text optimization</p>
+
+            <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <p className="text-sm font-semibold text-foreground">
+                  Pass Rate: <span className="text-primary text-lg">97%</span> | Publish Success ✅
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                All QA checks passed. Content is ready for publishing.
+              </p>
             </div>
+            
             <div className="flex gap-2">
-              <Button className="bg-primary hover:bg-primary-hover">
-                Re-run QA Checks
+              <Button size="sm" variant="outline">
+                View Full Report
               </Button>
-              <Button variant="outline">Export QA Report</Button>
+              <Button size="sm">
+                Publish Now
+              </Button>
             </div>
           </div>
         )}

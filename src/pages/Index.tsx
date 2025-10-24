@@ -3,6 +3,7 @@ import { Header } from "@/components/Console/Header";
 import { FilterSidebar } from "@/components/Console/FilterSidebar";
 import { OrchestrationBar } from "@/components/Console/OrchestrationBar";
 import { FloatingAssistant } from "@/components/Console/FloatingAssistant";
+import { KPIDashboard } from "@/components/Console/KPIDashboard";
 import { KeywordScanNode } from "@/components/Console/Nodes/KeywordScanNode";
 import { BenchmarkNode } from "@/components/Console/Nodes/BenchmarkNode";
 import { ContentRewriteNode } from "@/components/Console/Nodes/ContentRewriteNode";
@@ -19,12 +20,12 @@ const Index = () => {
   const [showAuditModal, setShowAuditModal] = useState(false);
   const [currentNode, setCurrentNode] = useState(0);
   const [isRunningAll, setIsRunningAll] = useState(false);
-  const [nodeProgress, setNodeProgress] = useState<number[]>(Array(7).fill(0));
-  const [completedNodes, setCompletedNodes] = useState<boolean[]>(Array(7).fill(false));
-  const [expandedNodes, setExpandedNodes] = useState<boolean[]>(Array(7).fill(false));
+  const [nodeProgress, setNodeProgress] = useState<number[]>(Array(6).fill(0));
+  const [completedNodes, setCompletedNodes] = useState<boolean[]>(Array(6).fill(false));
+  const [expandedNodes, setExpandedNodes] = useState<boolean[]>(Array(6).fill(false));
   const [workflowComplete, setWorkflowComplete] = useState(false);
 
-  const totalNodes = 7;
+  const totalNodes = 6;
 
   const handleStartAudit = () => {
     setShowAuditModal(true);
@@ -34,9 +35,9 @@ const Index = () => {
     setShowAuditModal(false);
     toast.success("SEO Audit initiated - Starting automatic workflow");
     setCurrentNode(0);
-    setNodeProgress(Array(7).fill(0));
-    setCompletedNodes(Array(7).fill(false));
-    setExpandedNodes([true, false, false, false, false, false, false]);
+    setNodeProgress(Array(6).fill(0));
+    setCompletedNodes(Array(6).fill(false));
+    setExpandedNodes([true, false, false, false, false, false]);
     setWorkflowComplete(false);
     
     // Automatically start running all nodes
@@ -58,17 +59,17 @@ const Index = () => {
       return updated;
     });
 
-    // Different durations for different nodes
+    // Different durations for different nodes (total ~60 seconds)
     const getIncrement = (index: number) => {
       switch(index) {
-        case 0: return 0.444; // 18 seconds (Node 1)
-        case 1: return 0.615; // 13 seconds (Node 2)
-        case 2: return 0.4;   // 20 seconds (Node 3)
-        case 3: return 1.25;  // 8 seconds (Node 4)
-        case 4: return 0.8;   // 10 seconds (Node 5)
-        case 5: return 0.8;   // 10 seconds (Node 6)
-        case 6: return 1.111; // 9 seconds (Node 7)
-        default: return 1.25; // 8 seconds
+        case 0: return 1.25;  // 8 seconds - Stage 1: Keyword & Performance Scan
+        case 1: return 1.0;   // 10 seconds - Stage 2: Competitive Benchmarking
+        case 2: return 0.833; // 12 seconds - Stage 3: Academic Content Agent
+        case 3: return 1.25;  // 8 seconds - Stage 4: Metadata & Schema Agent (was Publishing)
+        case 4: return 1.0;   // 10 seconds - Stage 5: Publishing & QA Agent (was Meta)
+        case 5: return 1.0;   // 10 seconds - Stage 6: Final Report
+        case 6: return 1.25;  // 8 seconds (spare)
+        default: return 1.25;
       }
     };
 
@@ -116,9 +117,9 @@ const Index = () => {
     
     setIsRunningAll(true);
     setCurrentNode(0);
-    setNodeProgress(Array(7).fill(0));
-    setCompletedNodes(Array(7).fill(false));
-    setExpandedNodes([true, false, false, false, false, false, false]);
+    setNodeProgress(Array(6).fill(0));
+    setCompletedNodes(Array(6).fill(false));
+    setExpandedNodes([true, false, false, false, false, false]);
     setWorkflowComplete(false);
     toast.success("Running all nodes sequentially");
 
@@ -141,17 +142,17 @@ const Index = () => {
       const element = document.getElementById(`node-${node + 1}`);
       element?.scrollIntoView({ behavior: "smooth", block: "center" });
 
-      // Different durations for different nodes
+      // Different durations for different nodes (total ~60 seconds)
       const getIncrement = (index: number) => {
         switch(index) {
-          case 0: return 0.444; // 18 seconds (Node 1)
-          case 1: return 0.615; // 13 seconds (Node 2)
-          case 2: return 0.4;   // 20 seconds (Node 3)
-          case 3: return 1.25;  // 8 seconds (Node 4)
-          case 4: return 0.8;   // 10 seconds (Node 5)
-          case 5: return 0.8;   // 10 seconds (Node 6)
-          case 6: return 1.111; // 9 seconds (Node 7)
-          default: return 1.25; // 8 seconds
+          case 0: return 1.25;  // 8 seconds - Stage 1: Keyword & Performance Scan
+          case 1: return 1.0;   // 10 seconds - Stage 2: Competitive Benchmarking
+          case 2: return 0.833; // 12 seconds - Stage 3: Academic Content Agent
+          case 3: return 1.25;  // 8 seconds - Stage 4: Metadata & Schema Agent
+          case 4: return 1.0;   // 10 seconds - Stage 5: Publishing & QA Agent
+          case 5: return 1.0;   // 10 seconds - Stage 6: Final Report
+          case 6: return 1.25;  // 8 seconds (spare)
+          default: return 1.25;
         }
       };
 
@@ -191,6 +192,7 @@ const Index = () => {
         
         <main className="flex-1 p-6 pb-24">
           <div className="max-w-6xl mx-auto space-y-6">
+            <KPIDashboard isComplete={completedNodes[5]} />
             <div id="node-1">
               <KeywordScanNode 
                 nodeNumber={1} 
@@ -231,7 +233,7 @@ const Index = () => {
             </div>
             
             <div id="node-4">
-              <PublishingNode 
+              <MetaAgentNode 
                 nodeNumber={4} 
                 isActive={currentNode === 4}
                 progress={nodeProgress[3]}
@@ -244,7 +246,7 @@ const Index = () => {
             </div>
             
             <div id="node-5">
-              <MetaAgentNode 
+              <QAAgentNode 
                 nodeNumber={5} 
                 isActive={currentNode === 5}
                 progress={nodeProgress[4]}
@@ -257,7 +259,7 @@ const Index = () => {
             </div>
             
             <div id="node-6">
-              <QAAgentNode 
+              <FinalReportNode 
                 nodeNumber={6} 
                 isActive={currentNode === 6}
                 progress={nodeProgress[5]}
@@ -266,19 +268,6 @@ const Index = () => {
                 onToggle={() => handleToggleNode(5)}
                 onRun={() => handleRunNode(5)}
                 enabled={completedNodes[4]}
-              />
-            </div>
-            
-            <div id="node-7">
-              <FinalReportNode 
-                nodeNumber={7} 
-                isActive={currentNode === 7}
-                progress={nodeProgress[6]}
-                completed={completedNodes[6]}
-                isExpanded={expandedNodes[6]}
-                onToggle={() => handleToggleNode(6)}
-                onRun={() => handleRunNode(6)}
-                enabled={completedNodes[5]}
               />
             </div>
 

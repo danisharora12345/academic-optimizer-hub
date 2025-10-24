@@ -74,19 +74,24 @@ export const KeywordScanNode = ({
         )}
 
         {completed && (
-          <div className="space-y-4">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="p-4 rounded-lg bg-secondary/50">
+          <div className="space-y-4 animate-fade-in">
+        <div className="grid grid-cols-4 gap-4">
+          <div className="p-4 rounded-lg bg-card border border-border">
             <p className="text-sm text-muted-foreground mb-1">Courses Scanned</p>
-            <p className="text-2xl font-bold text-foreground">200</p>
+            <p className="text-2xl font-bold text-foreground">3</p>
+            <p className="text-xs text-muted-foreground mt-1">Accounting, Cyber Security, Fashion</p>
           </div>
-          <div className="p-4 rounded-lg bg-secondary/50">
+          <div className="p-4 rounded-lg bg-card border border-border">
             <p className="text-sm text-muted-foreground mb-1">Keywords Found</p>
-            <p className="text-2xl font-bold text-primary">1,500</p>
+            <p className="text-2xl font-bold text-primary">47</p>
           </div>
-          <div className="p-4 rounded-lg bg-secondary/50">
-            <p className="text-sm text-muted-foreground mb-1">Performance Score</p>
-            <p className="text-2xl font-bold text-success">85%</p>
+          <div className="p-4 rounded-lg bg-card border border-border">
+            <p className="text-sm text-muted-foreground mb-1">Avg. CTR</p>
+            <p className="text-2xl font-bold text-foreground">3.2%</p>
+          </div>
+          <div className="p-4 rounded-lg bg-card border border-border">
+            <p className="text-sm text-muted-foreground mb-1">Avg. Rank</p>
+            <p className="text-2xl font-bold text-foreground">9.0</p>
           </div>
         </div>
 
