@@ -1,14 +1,6 @@
-import { useState } from "react";
 import { PenTool, Eye, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WorkflowNode } from "../WorkflowNode";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface ContentRewriteNodeProps {
   nodeNumber: number;
@@ -33,8 +25,6 @@ export const ContentRewriteNode = ({
   enabled,
   selectedCourse 
 }: ContentRewriteNodeProps) => {
-  const [tone, setTone] = useState("academic");
-
   const title = "BA (Hons) Accounting and Financial Management";
   const body = `Empower your global career with a BA (Hons) Accounting and Finance degree in London.
 
@@ -117,19 +107,6 @@ Why Choose This Course:
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Tone Selection:</label>
-                <Select value={tone} onValueChange={setTone}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="professional">Professional</SelectItem>
-                    <SelectItem value="conversational">Conversational</SelectItem>
-                    <SelectItem value="academic">Academic</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
 
           </div>

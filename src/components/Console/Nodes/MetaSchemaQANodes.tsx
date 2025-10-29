@@ -29,7 +29,7 @@ export const MetaAgentNode = ({
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="Metadata & Schema Agent"
+      title="Metadata Agent"
       icon={FileText}
       isActive={isActive}
       progress={progress}
@@ -41,7 +41,7 @@ export const MetaAgentNode = ({
         {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-            <p className="text-muted-foreground">Auto-generating metadata and structured JSON-LD...</p>
+            <p className="text-muted-foreground">Auto-generating metadata...</p>
           </div>
         )}
 
@@ -50,10 +50,6 @@ export const MetaAgentNode = ({
             <div className="bg-card p-4 rounded-lg border border-primary/20 space-y-3">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-semibold text-foreground">Generated Metadata</h4>
-                <span className="text-xs text-green-500 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" />
-                  Schema Validation Passed ✓
-                </span>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Meta Title (58 chars)</p>
@@ -66,26 +62,6 @@ export const MetaAgentNode = ({
                 <p className="text-sm text-foreground">
                   Study Accounting and Finance at UWL London. ACCA/CIMA accredited degree with FinTech, ESG finance & data analytics. Start your global finance career.
                 </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Schema JSON-LD (Course, Organization, FAQ)</p>
-                <div className="bg-muted p-3 rounded text-xs font-mono overflow-x-auto">
-                  <pre className="text-foreground">
-{`{
-  "@context": "https://schema.org",
-  "@type": "Course",
-  "name": "BSc Accounting and Finance",
-  "provider": {
-    "@type": "Organization",
-    "name": "University of West London"
-  },
-  "offers": {
-    "@type": "Offer",
-    "category": "Undergraduate"
-  }
-}`}
-                  </pre>
-                </div>
               </div>
             </div>
             
@@ -122,18 +98,17 @@ export const QAAgentNode = ({
         {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-            <p className="text-muted-foreground">Running QA checks: Lighthouse, broken links, schema validation, duplicate meta...</p>
+            <p className="text-muted-foreground">Running QA checks: Lighthouse, broken links, duplicate meta...</p>
           </div>
         )}
 
         {completed && (
           <div className="space-y-4 animate-fade-in">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
               {[
                 { label: "Performance", score: 96 },
                 { label: "Accessibility", score: 98 },
                 { label: "SEO", score: 95 },
-                { label: "Schema", score: 94 },
               ].map((item, i) => (
                 <div key={i} className="bg-card p-3 rounded-lg border border-border text-center">
                   <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
@@ -161,7 +136,6 @@ export const QAAgentNode = ({
                   {[
                     { metric: "Lighthouse Score", score: "95/100", status: "Pass" },
                     { metric: "Broken Links", score: "0 found", status: "Pass" },
-                    { metric: "Schema Validation", score: "Valid JSON-LD", status: "Pass" },
                     { metric: "Duplicate Meta", score: "None detected", status: "Pass" },
                     { metric: "Mobile Responsive", score: "100%", status: "Pass" },
                   ].map((item, i) => (
