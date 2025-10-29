@@ -24,6 +24,7 @@ const Index = () => {
   const [completedNodes, setCompletedNodes] = useState<boolean[]>(Array(6).fill(false));
   const [expandedNodes, setExpandedNodes] = useState<boolean[]>(Array(6).fill(false));
   const [workflowComplete, setWorkflowComplete] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState("");
 
   const totalNodes = 6;
 
@@ -115,6 +116,11 @@ const Index = () => {
   const handleRunAll = () => {
     if (isRunningAll) return;
     
+    if (!selectedCourse) {
+      toast.error("Please select a course first");
+      return;
+    }
+    
     setIsRunningAll(true);
     setCurrentNode(0);
     setNodeProgress(Array(6).fill(0));
@@ -188,7 +194,10 @@ const Index = () => {
       <Header onStartAudit={handleStartAudit} />
       
       <div className="flex">
-        <FilterSidebar />
+        <FilterSidebar 
+          selectedCourse={selectedCourse}
+          onCourseChange={setSelectedCourse}
+        />
         
         <main className="flex-1 p-6 pb-24">
           <div className="max-w-6xl mx-auto space-y-6">
@@ -203,6 +212,7 @@ const Index = () => {
                 onToggle={() => handleToggleNode(0)}
                 onRun={() => handleRunNode(0)}
                 enabled={true}
+                selectedCourse={selectedCourse}
               />
             </div>
             
@@ -216,6 +226,7 @@ const Index = () => {
                 onToggle={() => handleToggleNode(1)}
                 onRun={() => handleRunNode(1)}
                 enabled={completedNodes[0]}
+                selectedCourse={selectedCourse}
               />
             </div>
             
@@ -229,6 +240,7 @@ const Index = () => {
                 onToggle={() => handleToggleNode(2)}
                 onRun={() => handleRunNode(2)}
                 enabled={completedNodes[1]}
+                selectedCourse={selectedCourse}
               />
             </div>
             
@@ -242,6 +254,7 @@ const Index = () => {
                 onToggle={() => handleToggleNode(3)}
                 onRun={() => handleRunNode(3)}
                 enabled={completedNodes[2]}
+                selectedCourse={selectedCourse}
               />
             </div>
             
@@ -255,6 +268,7 @@ const Index = () => {
                 onToggle={() => handleToggleNode(4)}
                 onRun={() => handleRunNode(4)}
                 enabled={completedNodes[3]}
+                selectedCourse={selectedCourse}
               />
             </div>
             
@@ -268,6 +282,7 @@ const Index = () => {
                 onToggle={() => handleToggleNode(5)}
                 onRun={() => handleRunNode(5)}
                 enabled={completedNodes[4]}
+                selectedCourse={selectedCourse}
               />
             </div>
 

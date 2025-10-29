@@ -12,6 +12,7 @@ interface KeywordScanNodeProps {
   onToggle: () => void;
   onRun: () => void;
   enabled: boolean;
+  selectedCourse: string;
 }
 
 export const KeywordScanNode = ({ 
@@ -22,7 +23,8 @@ export const KeywordScanNode = ({
   isExpanded, 
   onToggle, 
   onRun,
-  enabled 
+  enabled,
+  selectedCourse 
 }: KeywordScanNodeProps) => {
 
   const mustHaveKeywords = [
@@ -77,9 +79,14 @@ export const KeywordScanNode = ({
           <div className="space-y-4 animate-fade-in">
         <div className="grid grid-cols-4 gap-4">
           <div className="p-4 rounded-lg bg-card border border-border">
-            <p className="text-sm text-muted-foreground mb-1">Courses Scanned</p>
-            <p className="text-2xl font-bold text-foreground">3</p>
-            <p className="text-xs text-muted-foreground mt-1">Accounting, Cyber Security, Fashion</p>
+            <p className="text-sm text-muted-foreground mb-1">Course Scanned</p>
+            <p className="text-2xl font-bold text-foreground">1</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {selectedCourse === "accounting" && "Accounting and Finance"}
+              {selectedCourse === "cybersecurity" && "Cyber Security"}
+              {selectedCourse === "fashion" && "Fashion Design"}
+              {!selectedCourse && "Select a course"}
+            </p>
           </div>
           <div className="p-4 rounded-lg bg-card border border-border">
             <p className="text-sm text-muted-foreground mb-1">Keywords Found</p>

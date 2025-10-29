@@ -19,6 +19,7 @@ interface ContentRewriteNodeProps {
   onToggle: () => void;
   onRun: () => void;
   enabled: boolean;
+  selectedCourse: string;
 }
 
 export const ContentRewriteNode = ({ 
@@ -29,7 +30,8 @@ export const ContentRewriteNode = ({
   isExpanded, 
   onToggle, 
   onRun,
-  enabled 
+  enabled,
+  selectedCourse 
 }: ContentRewriteNodeProps) => {
   const [tone, setTone] = useState("academic");
 

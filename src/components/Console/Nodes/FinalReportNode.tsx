@@ -11,6 +11,7 @@ interface FinalReportNodeProps {
   onToggle: () => void;
   onRun: () => void;
   enabled: boolean;
+  selectedCourse: string;
 }
 
 export const FinalReportNode = ({ 
@@ -21,7 +22,8 @@ export const FinalReportNode = ({
   isExpanded, 
   onToggle, 
   onRun,
-  enabled 
+  enabled,
+  selectedCourse 
 }: FinalReportNodeProps) => {
   const performanceData = [
     { label: "Week 1", before: 45, after: 72 },
@@ -57,7 +59,10 @@ export const FinalReportNode = ({
                 Workflow Complete ✓
               </h3>
               <p className="text-muted-foreground">
-                UWL course pages successfully optimized and ready for publishing
+                {selectedCourse === "accounting" && "Accounting and Finance"}
+                {selectedCourse === "cybersecurity" && "Cyber Security"}
+                {selectedCourse === "fashion" && "Fashion Design"}
+                {!selectedCourse && "Course"} page successfully optimized and ready for publishing
               </p>
             </div>
 
@@ -67,7 +72,7 @@ export const FinalReportNode = ({
                 { label: "Readability", value: "92%", color: "text-primary" },
                 { label: "Engagement Lift", value: "+35%", color: "text-green-500" },
                 { label: "Avg Rank Improvement", value: "+5.0 positions", color: "text-green-500" },
-                { label: "Pages Optimized", value: "3", color: "text-foreground" },
+                { label: "Pages Optimized", value: "1", color: "text-foreground" },
                 { label: "Schema Completeness", value: "94%", color: "text-primary" },
               ].map((metric, i) => (
                 <div key={i} className="bg-card p-4 rounded-lg border border-border">

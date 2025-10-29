@@ -11,6 +11,7 @@ interface BenchmarkNodeProps {
   onToggle: () => void;
   onRun: () => void;
   enabled: boolean;
+  selectedCourse: string;
 }
 
 export const BenchmarkNode = ({ 
@@ -21,7 +22,8 @@ export const BenchmarkNode = ({
   isExpanded, 
   onToggle, 
   onRun,
-  enabled 
+  enabled,
+  selectedCourse 
 }: BenchmarkNodeProps) => {
 
   const competitors = [

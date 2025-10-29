@@ -12,6 +12,7 @@ interface NodeProps {
   onToggle: () => void;
   onRun: () => void;
   enabled: boolean;
+  selectedCourse: string;
 }
 
 export const MetaAgentNode = ({ 
@@ -22,7 +23,8 @@ export const MetaAgentNode = ({
   isExpanded, 
   onToggle, 
   onRun,
-  enabled 
+  enabled,
+  selectedCourse 
 }: NodeProps) => {
   return (
     <WorkflowNode
@@ -110,7 +112,8 @@ export const QAAgentNode = ({
   isExpanded, 
   onToggle, 
   onRun,
-  enabled 
+  enabled,
+  selectedCourse 
 }: NodeProps) => {
   return (
     <WorkflowNode
