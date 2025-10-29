@@ -89,14 +89,6 @@ export const MetaAgentNode = ({
               </div>
             </div>
             
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline">
-                Edit Schema
-              </Button>
-              <Button size="sm" variant="outline">
-                Validate JSON-LD
-              </Button>
-            </div>
           </div>
         )}
       </div>
@@ -200,14 +192,6 @@ export const QAAgentNode = ({
               </p>
             </div>
             
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline">
-                View Full Report
-              </Button>
-              <Button size="sm">
-                Publish Now
-              </Button>
-            </div>
           </div>
         )}
       </div>

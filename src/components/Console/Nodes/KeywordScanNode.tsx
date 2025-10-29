@@ -126,16 +126,6 @@ export const KeywordScanNode = ({
           </div>
         </div>
 
-            <div className="flex gap-2">
-              <Button variant="outline">
-                <Eye className="mr-2 h-4 w-4" />
-                View Keyword Report
-              </Button>
-              <Button variant="outline">
-                <FileDown className="mr-2 h-4 w-4" />
-                Export CSV
-              </Button>
-            </div>
           </div>
         )}
       </div>

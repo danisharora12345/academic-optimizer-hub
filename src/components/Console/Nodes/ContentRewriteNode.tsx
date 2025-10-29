@@ -132,15 +132,6 @@ Why Choose This Course:
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline">
-                <Eye className="mr-2 h-4 w-4" />
-                View Full Content
-              </Button>
-              <Button size="sm">
-                Approve & Continue
-              </Button>
-            </div>
           </div>
         )}
       </div>

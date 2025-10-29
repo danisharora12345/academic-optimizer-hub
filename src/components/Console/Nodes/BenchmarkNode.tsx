@@ -98,16 +98,6 @@ export const BenchmarkNode = ({
               </p>
             </div>
             
-            <div className="flex gap-2">
-              <Button variant="outline">
-                <Eye className="mr-2 h-4 w-4" />
-                View Full Analysis
-              </Button>
-              <Button variant="outline">
-                <Save className="mr-2 h-4 w-4" />
-                Download Report
-              </Button>
-            </div>
           </div>
         )}
       </div>
