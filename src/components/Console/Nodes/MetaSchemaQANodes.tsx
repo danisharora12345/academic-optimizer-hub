@@ -29,7 +29,7 @@ export const MetaAgentNode = ({
   return (
     <WorkflowNode
       nodeNumber={nodeNumber}
-      title="Metadata Agent"
+      title="Metadata & Schema Agent"
       icon={FileText}
       isActive={isActive}
       progress={progress}
@@ -41,7 +41,7 @@ export const MetaAgentNode = ({
         {!completed && (
           <div className="text-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-            <p className="text-muted-foreground">Auto-generating metadata...</p>
+            <p className="text-muted-foreground">Auto-generating metadata and schema...</p>
           </div>
         )}
 
@@ -62,6 +62,26 @@ export const MetaAgentNode = ({
                 <p className="text-sm text-foreground">
                   Study Accounting and Finance at UWL London. ACCA/CIMA accredited degree with FinTech, ESG finance & data analytics. Start your global finance career.
                 </p>
+              </div>
+            </div>
+
+            <div className="bg-card p-4 rounded-lg border border-primary/20">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-semibold text-foreground">Schema Markup (JSON-LD)</h4>
+                <Badge variant="outline" className="text-xs">Course Schema</Badge>
+              </div>
+              <div className="bg-muted/50 p-3 rounded text-xs font-mono overflow-x-auto">
+                <pre className="text-foreground">{`{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "BSc Accounting and Finance",
+  "provider": {
+    "@type": "EducationalOrganization",
+    "name": "University of West London"
+  },
+  "description": "ACCA/CIMA accredited degree...",
+  "educationalCredentialAwarded": "Bachelor of Science"
+}`}</pre>
               </div>
             </div>
             
